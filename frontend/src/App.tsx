@@ -33,7 +33,12 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/chat", {
+      // Use the production backend URL provided
+      const API_URL = import.meta.env.DEV 
+        ? "http://localhost:3000/api/chat" 
+        : "https://backend-wine-omega-60.vercel.app/api/chat";
+
+      const response = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
