@@ -54,7 +54,7 @@ function App() {
         setMessages((prev) => [...prev, { role: "assistant", content: data.message.content }]);
       } else {
         console.error("AI Error:", data.error);
-        setMessages((prev) => [...prev, { role: "assistant", content: "Error: Could not fetch response." }]);
+        setMessages((prev) => [...prev, { role: "assistant", content: `Error: ${data.error || "Could not fetch response."}` }]);
       }
     } catch (error) {
       console.error("Request failed:", error);

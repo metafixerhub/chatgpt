@@ -10,13 +10,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const client = new OpenAI({
-  apiKey: process.env.EXPLABS_API_KEY,
-  baseURL: "https://api.experientiallabs.ai/v1",
-});
-
 app.post("/api/chat", async (req, res) => {
   try {
+    const apiKey = process.env.EXPLABS_API_KEY;
+    if (!apiKey) {
+      return res.status(400).json({ error: "Missing EXPLABS_API_KEY environment variable in Vercel." });
+    }
+
+    const client = new OpenAI({
+      apiKey: apiKey,
+      baseURL: "https://api.experientiallabs.ai/v1",
+    });
+
     const { messages } = req.body;
 
     const completion = await client.chat.completions.create({
@@ -30,7 +35,7 @@ app.post("/api/chat", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      error: "AI request failed",
+      error: error.message || "AI request failed",
     });
   }
 });
